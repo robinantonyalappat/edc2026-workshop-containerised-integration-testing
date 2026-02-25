@@ -12,6 +12,34 @@ it is placed in production.
 
 The conductors have high expectations to quality and will not accept a ticket system which is not 100% reliable.
 
+## Setup
+
+Ensure you have a virtual environment installed for this specific chapter with python 3.13+. Recommendation is to create
+it in this folder as there will be several venvs in different parts of the workshop. If you're not familiar with virtual
+environments you will be at the end of this! Please ask for help if needed.
+
+Create a virtual environment.
+
+```
+python -m venv venv
+```
+
+Activate your virtual environment.
+
+```
+source venv/bin/activate        # macOS / Linux
+
+.\venv\Scripts\Activate.ps1     # Windows (PowerShell)
+```
+
+Install dependencies and the application itself.
+
+```
+pip install ".[dev]"
+```
+
+Please refer back to this section for future chapters where creating a virtual environment is required.
+
 ## Task 1: Run the application? Already? Have you verified that the tests pass?
 
 As we are all good developers we know that tests come first. Always. Thus, we should ensure all the tests for our
