@@ -1,4 +1,4 @@
-from tests.containers import PostgresDatabase
+from testcontainers.postgres import PostgresContainerfrom tests.containers import PostgresDatabase
 
 # Chapter 2 - Corporate needs you to find the differences between these pictures
 
@@ -174,14 +174,12 @@ fixture. Once complete, run the unit tests again.
 
 ### Hint
 
-Your postgres connection string should have the following format where values are configurable but some examples can be
-seen in [docker-compose.yml](./docker-compose.yml).
+Your `PostgresContainer()` initialization must include the driver argument to specify the dialect for the connection
+string to the database. This is beacuse we use the `psycopg v3` package and not the older `psycopg v2`. Add this part in
+you code where you create the container.
 
 ```python
-connection_string: str = (
-    f"Host={database_alias}; Port={5432}; Username={database_username}; Password={database_password}; "
-    f"Database={database_alias}; SSL Mode=Disable;"
-)
+PostgresContainer(..., driver="psycopg")
 ```
 
 ## Bonus tasks
