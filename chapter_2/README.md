@@ -101,6 +101,27 @@ def test_start_postgres_container(postgres_database: PostgresDatabase) -> None:
 
 ```
 
+Execute that test while you observe your Docker Desktop GUI or monitor your containers live in the terminal with the
+command `docker stats`.
+
+## Task 3: Inspecting the container
+
+When working with containers you often end up in the situation "my container starts, shuts down immediately and doesn't
+tell me anything". This situation is difficult to debug and there are two main components which are important. Logs and
+remote access. First, let's ensure the container logs are correctly passed to our pytest output.
+
+First, let us add some middleware to the `DockerContainer` object from Testcontainers which streams all the container
+logs to our pytest output.
+
+## Task 4: Inspecting the container 2
+
+Now it's time to remotely access the container (or maybe we should call it locally access?). There are multiple ways to
+do this, particularly easy with Docker Desktop, but we will do it through the terminal.
+
+First, ensure that your test `test_start_postgres_container` doesn't finish running. If it does the container will just
+be torn down by the framework and we won't have time to inspect it. Multiple ways to Rome, but either debug the test or
+add an infinite while-loop.
+
 ## Presentation topics
 
 - Why are we using yield
@@ -113,6 +134,8 @@ def test_start_postgres_container(postgres_database: PostgresDatabase) -> None:
 
 Investigate the parent classes of the `PostgresContainer` until you find the `DockerContainer` class. Which fields are
 available in this class? Which configuration options are available to you?
+
+- Specifically look at the `def with_` functions which are very helpful for configuration.
 
 ### Exploring community modules
 
