@@ -3,6 +3,7 @@ from typing import Iterator, Generator
 import pytest
 from fastapi import FastAPI
 from starlette.testclient import TestClient
+from testcontainers.core.container import DockerContainer
 from testcontainers.postgres import PostgresContainer
 
 from .containers import PostgresDatabase
@@ -29,8 +30,14 @@ def postgres_database() -> Generator[PostgresDatabase]:
         dbname="train",
         driver="psycopg",
     ).with_exposed_ports(5432) as postgres:
-
         psql_url: str = postgres.get_connection_url()
         yield PostgresDatabase(
             container=postgres, connection_string=psql_url, alias=postgres.dbname
         )
+
+
+def wait_for_port_mapping_to_be_available(
+    container: DockerContainer, port: int, timeout: int = 10, delay: int = 2
+) -> None:
+    # Implementation of wait for port mapping to be available
+    raise NotImplementedError

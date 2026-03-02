@@ -37,10 +37,25 @@ def test_buy_ticket(
     assert ticket.passenger_name == passenger_name
     assert ticket.seat_number == seat_number
 
+
 def test_start_postgres_container(postgres_database: PostgresDatabase) -> None:
     logger.info(f"Started database with name {postgres_database.container.dbname}")
     logger.info(f"Started database with image {postgres_database.container.image}")
-    logger.info(f"Started database with username {postgres_database.container.username}")
-    logger.info(f"Started database with password {postgres_database.container.password}")
+    logger.info(
+        f"Started database with username {postgres_database.container.username}"
+    )
+    logger.info(
+        f"Started database with password {postgres_database.container.password}"
+    )
     logger.info(f"Started database with port {postgres_database.container.port}")
-    logger.info(f"Started database with connection string {postgres_database.connection_string}")
+    logger.info(
+        f"Started database with connection string {postgres_database.connection_string}"
+    )
+
+
+def test_start_postgres_container_and_access_exposed_ports(
+    postgres_database: PostgresDatabase,
+) -> None:
+    logger.info(
+        f"The exposed port for 5432 is {postgres_database.container.get_exposed_port(5432)}"
+    )

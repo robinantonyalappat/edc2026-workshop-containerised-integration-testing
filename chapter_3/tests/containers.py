@@ -6,3 +6,5 @@ class PostgresDatabase:
         self.container: PostgresContainer = container
         self.connection_string: str = connection_string
         self.alias: str = alias
+
+
