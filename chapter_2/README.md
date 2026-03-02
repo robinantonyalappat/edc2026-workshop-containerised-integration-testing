@@ -1,5 +1,3 @@
-from testcontainers.postgres import PostgresContainerfrom tests.containers import PostgresDatabase
-
 # Chapter 2 - Corporate needs you to find the differences between these pictures
 
 ![img.png](docs/corporate.png)
