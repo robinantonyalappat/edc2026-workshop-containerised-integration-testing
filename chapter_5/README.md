@@ -154,3 +154,50 @@ there a difference to the log output?
 Those useful `.with_` configuration functions again...
 
 ## Task 4: Write a test towards the Tickets API
+
+Finally, we have a functioning setup where we can run the full Tickets API as a custom container which is also able to
+talk to our database. All running in docker and started through pytest. To finish it off, lets write a proper test, not
+just the one we have now that is for show.
+
+Going all the way back to chapter one, implement the following test, except now we make calls to the Tickets API running
+in our container instead of the `TestClient`.
+
+```python
+@pytest.mark.parametrize(
+    "train_code,passenger_name,seat_number",
+    [
+        ("The Orient Express", "Leonardo DaVinci", 14),
+        ("Bergensbanen", "Jonas Gahr Støre", 1),
+        ("Raumabanen", "Kong Harald", None),
+    ],
+)
+def test_buy_ticket(
+        client: TestClient, train_code: str, passenger_name: str, seat_number: str | int
+) -> None:
+    buy_ticket_payload: TicketBuyRequest = TicketBuyRequest(
+        train_code=train_code,
+        passenger_name=passenger_name,
+        seat_number=seat_number,
+    )
+
+    buy_ticket_response: Response = client.post(
+        "/tickets/buy/", json=buy_ticket_payload.model_dump()
+    )
+    ticket: TicketDto = TicketDto.model_validate(buy_ticket_response.json())
+
+    assert ticket.id
+    assert ticket.train_code == train_code
+    assert ticket.passenger_name == passenger_name
+    assert ticket.seat_number == seat_number
+```
+
+### Hint
+
+While we do have access to the `tickets_api` package here, we have not installed it and it would be better to make our
+tests independent of the package itself. Use a library for requests, e.g. the requests library, and verify the response
+content you receive from the API.
+
+## Bonus task
+
+The foundations are in place. Before we extend even further with more components and remote repositories, take a moment
+to consider how this functionality could be used in your applications. 
