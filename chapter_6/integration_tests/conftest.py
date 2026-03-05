@@ -5,17 +5,46 @@ from loguru import logger
 from testcontainers.core.container import DockerContainer
 
 import pytest
+from testcontainers.core.network import Network
 
 from integration_tests.custom_containers.postgres import (
     PostgresDatabase,
     create_postgres_container,
 )
-from integration_tests.custom_containers.tickets_api import TicketsAPI
+from integration_tests.custom_containers.tickets_api import (
+    TicketsAPI,
+    create_tickets_api_container,
+    wait_for_tickets_api_to_be_ready,
+)
 
 
 @pytest.fixture
-def tickets_api(postgres_database: PostgresDatabase) -> Generator[TicketsAPI]:
-    raise NotImplementedError
+def network():
+    with Network() as network:
+        yield network
+
+
+@pytest.fixture
+def tickets_api(
+    network: Network, postgres_database: PostgresDatabase
+) -> Generator[TicketsAPI]:
+    image, container = create_tickets_api_container(
+        network=network, database_connection_string=postgres_database.connection_string
+    )
+
+    with image:
+        with container as container:
+            wait_for_port_mapping_to_be_available(container=container, port=3000)
+            backend_url: str = f"http://localhost:{container.get_exposed_port(3000)}"
+            wait_for_tickets_api_to_be_ready(backend_url=backend_url)
+
+            yield TicketsAPI(
+                container=container,
+                backend_url=backend_url,
+                name="tickets_api",
+                port=3000,
+                alias="tickets_api",
+            )
 
 
 @pytest.fixture
