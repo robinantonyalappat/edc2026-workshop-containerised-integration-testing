@@ -48,10 +48,10 @@ def tickets_api(
 
 
 @pytest.fixture
-def postgres_database() -> Generator[PostgresDatabase]:
+def postgres_database(network: Network) -> Generator[PostgresDatabase]:
     network_alias: str = "postgres"
 
-    with create_postgres_container(network_alias=network_alias) as postgres:
+    with create_postgres_container(network=network, network_alias=network_alias) as postgres:
         wait_for_port_mapping_to_be_available(container=postgres, port=5432)
         psql_url: str = (
             f"postgresql{postgres.driver}://{postgres.username}:{postgres.password}@{network_alias}:{postgres.port}/{postgres.dbname}"
