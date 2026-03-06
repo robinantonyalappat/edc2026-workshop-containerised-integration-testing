@@ -1,4 +1,4 @@
-name: Run integration tests
+name: Run integration tests chapter 6
 
 on:
   workflow_call:
@@ -29,9 +29,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          repository: equinor/edc2026-workshop-containerised-integration-testing
+          repository: <your-github-username>/edc2026-workshop-containerised-integration-testing
           ref: main
-          path: chapter_6/integration_tests_ch6
 
       - name: Set up Python
         uses: actions/setup-python@v5
