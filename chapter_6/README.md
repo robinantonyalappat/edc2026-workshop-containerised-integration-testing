@@ -43,4 +43,16 @@ Your task is to update the fixture for our custom Tickets API container to use t
 GitHub Container Registry instead of building it locally. Once you have done so, ensure all the tests pass by running
 `pytest -s`.
 
-## Task 2: Run the integration tests in a remote repository
+## Task 2: Where do we actually run the integration tests?
+
+In the end, your project is what determines where you would like them to run. There are several options. You could have
+a repository for just the integrations tests and run them there. We have opted away from this as we prefer our tests
+running close to our actual code. It is also difficult to have the integration tests as a check in your pull requests if
+you do this.
+
+Alternatively, we could move back to having the Tickets API in this repository and run the tests within the same
+repository. What about when we get the new Train Logistics&trade; application? We would have to go monorepo or have
+separate implementations of the integration tests in every repository.
+
+Finally, and the solution we have opted for, is to have the integration test repository define a reusable workflow
+which every repository we have can import and execute as a local workflow. 
