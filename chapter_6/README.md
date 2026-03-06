@@ -81,6 +81,7 @@ working on.
 
 Go to the "Actions" tab on your forks github page and verify that the "Run integration tests chapter 6" workflow is
 present. There should be a button "Run workflow" which you can use to run the test. Use "latest" as lane input.
+![img.png](docs/img.png)
 
 Does your workflow run successfully?
 
