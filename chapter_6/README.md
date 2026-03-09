@@ -85,6 +85,16 @@ present. There should be a button "Run workflow" which you can use to run the te
 
 Does your workflow run successfully?
 
+### Discussion: Which language should we use for integration tests?
+
+The workshop focuses on using python, but the Testcontainers framework supports a wide range of different programming
+languages. Which language should you use?
+
+Short answer, as always, it's up to you and your preferences. Our main point here is to showcase that you don't have to
+use the same language as your other projects. By implementing the integration test in a separate repository (or just a
+separate module), using a reusable workflow for test execution and communicating with your applications through APIs,
+message brokers etc, you can use whichever language you prefer for the integration test structure.
+
 ### Discussion: The lane input
 
 If you inspect the workflow you will see that the lane input is currently not used for anything. This is true, but we
