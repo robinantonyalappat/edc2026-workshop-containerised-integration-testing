@@ -105,7 +105,8 @@ While you are absolutely certain you are also paranoid, having had horrible expe
 latest release, and decide to perform the unit tests manually once more but now in the production environment.
 
 Repeat the three manual tests from [Task 4](#task-4-verify-your-tests-locally) by using the test input values in the
-endpoints. Do you get the same results as with the unit tests? If not, what is the cause?
+endpoints. The API can still be found at `http://localhost:3000/docs` Do you get the same results as with the unit
+tests? If not, what is the cause?
 
 ## Task 6: How can we accurately test our production environment locally?
 
