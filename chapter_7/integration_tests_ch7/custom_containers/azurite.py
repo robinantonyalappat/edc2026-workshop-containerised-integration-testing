@@ -37,10 +37,10 @@ def create_azurite_container(
         "azurite --blobHost 0.0.0.0 --queueHost 0.0.0.0 --tableHost 0.0.0.0 --skipApiVersionCheck"
     )
 
-    AZURITE_IMAGE: str = "mcr.microsoft.com/azure-storage/azurite:latest"
+    azurite_image: str = "mcr.microsoft.com/azure-storage/azurite:latest"
 
     container: LogDockerContainer = (
-        LogDockerContainer(image=AZURITE_IMAGE, command=cmd)
+        LogDockerContainer(image=azurite_image, command=cmd)
         .with_name(name)
         .with_network(network)
         .with_network_aliases(name)

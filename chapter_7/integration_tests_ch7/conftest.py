@@ -7,18 +7,13 @@ from testcontainers.core.container import DockerContainer
 import pytest
 from testcontainers.core.network import Network
 
-from chapter_7.integration_tests_ch7.custom_containers.azurite import (
-    AzuriteStorageContainer,
+from integration_tests_ch7.custom_containers.azurite import (
     TrainLogisticsStorage,
-    azurite_connection_string_for_containers,
-    create_azurite_container,
-    ensure_blob_containers,
 )
-from chapter_7.integration_tests_ch7.custom_containers.train_logistics import (
+from integration_tests_ch7.custom_containers.train_logistics import (
     TrainLogisticsAPI,
-    create_train_logistics_api_container,
-    wait_for_train_logistics_api_to_be_ready,
 )
+
 from integration_tests_ch7.custom_containers.postgres import (
     PostgresDatabase,
     create_postgres_container,

@@ -6,10 +6,10 @@ import requests
 from loguru import logger
 from requests import Response
 
-from chapter_7.integration_tests_ch7.custom_containers.azurite import (
+from integration_tests_ch7.custom_containers.azurite import (
     TrainLogisticsStorage,
 )
-from chapter_7.integration_tests_ch7.custom_containers.train_logistics import (
+from integration_tests_ch7.custom_containers.train_logistics import (
     TrainLogisticsAPI,
 )
 from integration_tests_ch7.custom_containers.postgres import PostgresDatabase
