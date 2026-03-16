@@ -4,7 +4,7 @@ from azure.core.exceptions import ResourceExistsError
 from azure.storage.blob import BlobServiceClient
 from docker.models.networks import Network
 
-from chapter_7.integration_tests_ch7.custom_containers.log_docker_container import (
+from integration_tests_ch7.custom_containers.log_docker_container import (
     LogDockerContainer,
 )
 
