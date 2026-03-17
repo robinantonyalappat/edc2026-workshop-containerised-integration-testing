@@ -1,0 +1,17 @@
+name: Integration Tests
+
+on:
+    workflow_dispatch:
+        inputs:
+            lane:
+                description: "Target environment"
+                required: true
+                type: string
+                default: "development"
+    workflow_call:
+        inputs:
+            lane:
+                description: "Target environment"
+                required: true
+                type: string
+                default: "development"
