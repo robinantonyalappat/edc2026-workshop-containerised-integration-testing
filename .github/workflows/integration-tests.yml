@@ -15,3 +15,36 @@ on:
                 required: true
                 type: string
                 default: "development"
+
+permissions:
+    contents: read
+
+env:
+    TICKETS_DATABASE_URL: postgresql+psycopg://train:train@db:5432/train
+
+jobs:
+    tests:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v6
+            #   uses: actions/checkout@v4
+            #   with:
+            #         repository: * Name of your repo *
+            #         ref: * Nme of your branch *
+
+            - name: Set up Python
+              #uses: actions/setup-python@v5
+              uses: actions/setup-python@v6
+              with:
+                  python-version: "3.13"
+
+            - name: Install dependencies
+              working-directory: chapter_4
+              run: |
+                  pip install -e ".[dev]"
+
+            - name: Run integration tests with pytest
+              working-directory: chapter_4
+              run: |
+                  pytest -s .
