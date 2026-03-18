@@ -5,7 +5,8 @@ from integration_tests_ch5.custom_containers.tickets_api import TicketsAPI
 
 
 def test_startup_of_custom_tickets_api_container(
-    tickets_api: TicketsAPI, postgres_database: PostgresDatabase
+    tickets_api: TicketsAPI, 
+    postgres_database: PostgresDatabase
 ) -> None:
     logger.info(f"Started Tickets API with image {tickets_api.container.image}")
     logger.info(f"Started Tickets API with port {tickets_api.port}")

@@ -3,17 +3,17 @@ from typing import Iterator, Generator
 import pytest
 from fastapi import FastAPI
 from starlette.testclient import TestClient
-from testcontainers.core.container import DockerContainer
 from testcontainers.postgres import PostgresContainer
 
-from .containers import PostgresDatabase
-from tickets_api_ch3.app import create_app
+from testcontainers.core.container import DockerContainer, LogMessageWaitStrategy
+from testcontainers.core.waiting_utils import wait_for_logs
 
+from .containers import PostgresDatabase
+from tickets_api_ch5.app import create_app
 
 @pytest.fixture
 def app(postgres_database: PostgresDatabase) -> FastAPI:
     return create_app(database_url=postgres_database.connection_string)
-
 
 @pytest.fixture
 def client(app: FastAPI) -> Iterator[TestClient]:
@@ -30,6 +30,8 @@ def postgres_database() -> Generator[PostgresDatabase]:
         dbname="train",
         driver="psycopg",
     ).with_exposed_ports(5432) as postgres:
+        # strategy = LogMessageWaitStrategy("database system is ready to accept connections")
+        # wait_for_logs(postgres, strategy)
         psql_url: str = postgres.get_connection_url()
         yield PostgresDatabase(
             container=postgres, connection_string=psql_url, alias=postgres.dbname

@@ -2,7 +2,8 @@ import time
 from datetime import datetime
 from typing import Generator
 from loguru import logger
-from testcontainers.core.container import DockerContainer
+from testcontainers.core.container import DockerContainer, LogMessageWaitStrategy
+from testcontainers.core.waiting_utils import wait_for_logs
 
 import pytest
 
@@ -10,26 +11,50 @@ from integration_tests_ch5.custom_containers.postgres import (
     PostgresDatabase,
     create_postgres_container,
 )
-from integration_tests_ch5.custom_containers.tickets_api import TicketsAPI
+from integration_tests_ch5.custom_containers.tickets_api import TicketsAPI, create_tickets_api_container
 
+# @pytest.fixture
+# def tickets_api(postgres_database: PostgresDatabase) -> Generator[TicketsAPI]:
+#     image, container = create_tickets_api_container(postgres_database.connection_string)
+#     with image:
+#         with container:
+#             wait_for_port_mapping_to_be_available(container=container, port=3000)    
+#             yield TicketsAPI(
+#                 container=container,
+#                 backend_url=postgres_database.connection_string,
+#                 name="tickets-api",
+#                 port=3000,
+#                 alias="tickets-api",
+#             )
+#             #raise NotImplementedError
 
 @pytest.fixture
-def tickets_api(postgres_database: PostgresDatabase) -> Generator[TicketsAPI]:
-    raise NotImplementedError
+def tickets_api() -> Generator[TicketsAPI]:
+    image, container = create_tickets_api_container("")
+    with image:
+        with container:
+            wait_for_port_mapping_to_be_available(container=container, port=3000)    
+            yield TicketsAPI(
+                container=container,
+                backend_url="",
+                name="tickets-api",
+                port=3000,
+                alias="tickets-api",
+            )
 
-
-@pytest.fixture
-def postgres_database() -> Generator[PostgresDatabase]:
-    network_alias: str = "postgres"
-
-    with create_postgres_container(network_alias=network_alias) as postgres:
-        wait_for_port_mapping_to_be_available(container=postgres, port=5432)
-        psql_url: str = (
-            f"postgresql{postgres.driver}://{postgres.username}:{postgres.password}@{network_alias}:{postgres.port}/{postgres.dbname}"
-        )
-        yield PostgresDatabase(
-            container=postgres, connection_string=psql_url, alias=network_alias
-        )
+# @pytest.fixture
+# def postgres_database() -> Generator[PostgresDatabase]:
+#     network_alias: str = "postgres"
+#     with create_postgres_container(network_alias=network_alias) as postgres:
+#         #wait_for_port_mapping_to_be_available(container=postgres, port=5432)
+#         strategy = LogMessageWaitStrategy("5432")
+#         wait_for_logs(postgres, strategy)
+#         psql_url: str = (
+#             f"postgresql{postgres.driver}://{postgres.username}:{postgres.password}@{network_alias}:{postgres.port}/{postgres.dbname}"
+#         )
+#         yield PostgresDatabase(
+#             container=postgres, connection_string=psql_url, alias=network_alias
+#         )
 
 
 def wait_for_port_mapping_to_be_available(

@@ -3,12 +3,16 @@ from typing import Iterator, Generator
 import pytest
 from fastapi import FastAPI
 from starlette.testclient import TestClient
-from testcontainers.core.container import DockerContainer
+from testcontainers.core.container import DockerContainer, LogMessageWaitStrategy
 from testcontainers.postgres import PostgresContainer
 
 from .containers import PostgresDatabase
 from tickets_api_ch3.app import create_app
+import time
+from loguru import logger
 
+from testcontainers.core.container import DockerContainer
+from testcontainers.core.waiting_utils import wait_for_logs
 
 @pytest.fixture
 def app(postgres_database: PostgresDatabase) -> FastAPI:
@@ -23,6 +27,8 @@ def client(app: FastAPI) -> Iterator[TestClient]:
 
 @pytest.fixture
 def postgres_database() -> Generator[PostgresDatabase]:
+    # with DockerContainer("hello-world") as container:
+    #     delay = wait_for_logs(container, "Hello from Docker!")
     with PostgresContainer(
         image="postgres:17",
         username="train",
@@ -30,6 +36,9 @@ def postgres_database() -> Generator[PostgresDatabase]:
         dbname="train",
         driver="psycopg",
     ).with_exposed_ports(5432) as postgres:
+        #strategy = LogMessageWaitStrategy("ready")
+        strategy = LogMessageWaitStrategy("database system is ready to accept connections")
+        wait_for_logs(postgres, strategy)
         psql_url: str = postgres.get_connection_url()
         yield PostgresDatabase(
             container=postgres, connection_string=psql_url, alias=postgres.dbname
@@ -37,7 +46,27 @@ def postgres_database() -> Generator[PostgresDatabase]:
 
 
 def wait_for_port_mapping_to_be_available(
-    container: DockerContainer, port: int, timeout: int = 10, delay: int = 2
+    container: PostgresContainer, port: int, timeout: int = 10, delay: int = 2
 ) -> None:
-    # Implementation of wait for port mapping to be available
-    raise NotImplementedError
+    logger.info(f"Checking port {port}")
+    with container:
+        strategy = LogMessageWaitStrategy("heeeeeeee")
+        wait_for_logs(container, strategy)
+        logger.info(f"Checking port {port} completed")
+        #return
+        
+    # logger.info(f"Checking port {port}. Waiting for it to be available...")
+    # # Implementation of wait for port mapping to be available
+    # while timeout > 0:
+    #     try:
+    #         logger.info(f"Checking port {port}")
+    #         container.get_exposed_port(port)
+    #         logger.info(f"Checking port {port} completed")
+    #         return
+    #     except ConnectionError:
+    #         logger.info(f"Port {port} mapping is not available yet. Retrying in {delay} seconds...")
+    #         timeout -= delay
+    #         time.sleep(delay)
+    #     except Exception:
+    #         raise Exception(f"Unknown exception while accessing Port {port}")
+    # raise TimeoutError(f"Port {port} mapping was not available within the timeout period.")
