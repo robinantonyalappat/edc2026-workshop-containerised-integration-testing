@@ -54,18 +54,21 @@ def test_buy_ticket(
     logger.info(f"Started Tickets API with image {tickets_api.container.image}")
     #logger.info(f"Started Tickets API with port {tickets_api.port}")
     logger.info(f"Started Tickets API with exposed port {tickets_api.container.get_exposed_port(3000)}")
-    time.sleep(20)
     port=tickets_api.container.get_exposed_port(3000)
 
-    url = f'https://localhost:{port}/tickets/buy/' # A service that echoes POST requests
+    url = f'http://localhost:{port}/tickets/buy' # A service that echoes POST requests
+    #payload = f'{'train_code': {train_code}, 'passenger_name': passenger_name, 'seat_number': seat_number}'
     payload = {'train_code': train_code, 'passenger_name': passenger_name, 'seat_number': seat_number}
+    logger.info(f"Response status code: {payload}")
 
     # Send the POST request with form data
-    r = requests.post(url, data=payload)
+    r = requests.post(url, json=payload)
 
     # buy_ticket_response: Response = tickets_api(
     #     "/tickets/buy/", json=buy_ticket_payload.model_dump()
     # )
+    logger.info(f"Response status code: {r.status_code}")
+    logger.info(f"Response status code: {r.json()}")
     ticket: TicketDto = TicketDto.model_validate(r.json())
 
     assert ticket.id

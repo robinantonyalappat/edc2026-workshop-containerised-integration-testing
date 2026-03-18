@@ -7,7 +7,7 @@ on:
         description: "Which lane to run (dev or latest)"
         required: true
         type: string
-        default: 'latest'
+        default: "latest"
 
   workflow_dispatch:
     inputs:
@@ -15,11 +15,10 @@ on:
         description: "Which lane to run (dev or latest)"
         required: true
         type: string
-        default: 'latest'
+        default: "latest"
 
 permissions:
   contents: read
-
 
 jobs:
   tests:
@@ -27,13 +26,15 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          repository: <your-github-username>/edc2026-workshop-containerised-integration-testing
-          ref: main
+        uses: actions/checkout@v6
+        # uses: actions/checkout@v4
+        # with:
+        #   repository: robinantonyalappat/edc2026-workshop-containerised-integration-testing
+        #   ref: main
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
+        #uses: actions/setup-python@v5
         with:
           python-version: "3.14"
 
@@ -44,6 +45,5 @@ jobs:
 
       - name: Run integration tests with pytest
         working-directory: chapter_6
-
         run: |
           pytest -s .
