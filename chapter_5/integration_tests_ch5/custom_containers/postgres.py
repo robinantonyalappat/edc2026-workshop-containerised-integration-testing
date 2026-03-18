@@ -1,4 +1,5 @@
 from testcontainers.postgres import PostgresContainer
+from testcontainers.core.network import Network
 
 
 class PostgresDatabase:
@@ -10,7 +11,7 @@ class PostgresDatabase:
         self.alias: str = alias
 
 
-def create_postgres_container(network_alias: str = "postgres") -> PostgresContainer:
+def create_postgres_container(network: Network, network_alias: str = "postgres") -> PostgresContainer:
     container: PostgresContainer = (
         PostgresContainer(
             image="postgres:17",
@@ -22,6 +23,7 @@ def create_postgres_container(network_alias: str = "postgres") -> PostgresContai
         .with_name("train")
         .with_exposed_ports(5432)
         .with_network_aliases(network_alias)
+        .with_network(network)
     )
 
     return container

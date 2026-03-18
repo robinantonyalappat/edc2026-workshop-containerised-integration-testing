@@ -2,6 +2,7 @@ from typing import Tuple
 
 from testcontainers.core.container import DockerContainer
 from testcontainers.core.image import DockerImage
+from testcontainers.core.network import Network
 
 class TicketsAPI:
     def __init__(
@@ -19,12 +20,13 @@ class TicketsAPI:
         self.alias: str = alias
 
 
-def create_tickets_api_container(connection_string: str) -> Tuple[DockerImage, DockerContainer]:
+def create_tickets_api_container(connection_string: str, network: Network, network_alias: str = "tickets-api") -> DockerContainer:
     #with DockerImage(path="./core/tests/image_fixtures/sample/", tag="test-image") as image:
-    image = DockerImage(path="tickets_api", tag="development")
-    container = DockerContainer(image=str(image)).with_exposed_ports(3000).with_env('TICKETS_DATABASE_URL', connection_string)
+    #image = DockerImage(path="tickets_api", tag="tickets_api:latest")
+    container = DockerContainer(image="ghcr.io/equinor/tickets-api:latest").with_exposed_ports(3000).with_env('TICKETS_DATABASE_URL', connection_string).with_network(network).with_network_aliases(network_alias)
     
-    return image, container
+    return container
+    #return image, container
 
 
 def wait_for_tickets_api_to_be_ready(backend_url: str, timeout: int = 20) -> None:
